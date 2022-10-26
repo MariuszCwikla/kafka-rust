@@ -148,6 +148,14 @@ pub struct Record<'a, K, V> {
     /// "unspecified".  A `Producer` will then typically try to derive
     /// a partition on its own.
     pub partition: i32,
+
+    /// Headers associated with this (message) record
+    pub headers: Vec<RecordHeader<'a>>,
+}
+
+pub struct RecordHeader<'a>{
+    pub key: &'a str,
+    pub value: &'a [u8]
 }
 
 impl<'a, K, V> Record<'a, K, V> {
@@ -161,6 +169,7 @@ impl<'a, K, V> Record<'a, K, V> {
             value,
             topic,
             partition: -1,
+            headers: Vec::new()
         }
     }
 
@@ -168,6 +177,13 @@ impl<'a, K, V> Record<'a, K, V> {
     #[inline]
     pub fn with_partition(mut self, partition: i32) -> Self {
         self.partition = partition;
+        self
+    }
+
+    /// Convenience method to set headers.
+    #[inline]
+    pub fn with_headers(mut self, headers: Vec<RecordHeader<'a>>) -> Self {
+        self.headers = headers;
         self
     }
 }
@@ -183,6 +199,7 @@ impl<'a, V> Record<'a, (), V> {
             value,
             topic,
             partition: -1,
+            headers: Vec::new()
         }
     }
 }

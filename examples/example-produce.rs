@@ -51,6 +51,7 @@ fn produce_message<'a, 'b>(
         partition: -1,
         key: (),
         value: data,
+        headers: Vec::new()
     })?;
 
     // ~ we can achieve exactly the same as above in a shorter way with
